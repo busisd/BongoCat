@@ -22,6 +22,8 @@ class BongoCatGameController():
 		self.screen = None
 		
 def main():
+	pygame.mixer.pre_init(44100, -16, 2, 2048)
+	pygame.mixer.init()
 	pygame.init()	
 	
 	game_control = BongoCatGameController()
