@@ -2,14 +2,19 @@ import pygame
 
 class BongoCatGameController():
 	def __init__(self):
-		self.CAT_NONE_DOWN_FILE = "BongoCatBothUp.png"
-		self.CAT_LEFT_DOWN_FILE = "BongoCatLeftDown.png"
-		self.CAT_RIGHT_DOWN_FILE = "BongoCatRightDown.png"
-		self.CAT_BOTH_DOWN_FILE = "BongoCatBothDown.png"
-		self.CAT_NONE_DOWN_IMAGE = pygame.image.load("images/BongoCatBothUp.png")
-		self.CAT_LEFT_DOWN_IMAGE = pygame.image.load("images/BongoCatLeftDown.png")
-		self.CAT_RIGHT_DOWN_IMAGE = pygame.image.load("images/BongoCatRightDown.png")
-		self.CAT_BOTH_DOWN_IMAGE = pygame.image.load("images/BongoCatBothDown.png")
+		self.CAT_NONE_DOWN_FILE = "images/BongoCatBothUp.png"
+		self.CAT_LEFT_DOWN_FILE = "images/BongoCatLeftDown.png"
+		self.CAT_RIGHT_DOWN_FILE = "images/BongoCatRightDown.png"
+		self.CAT_BOTH_DOWN_FILE = "images/BongoCatBothDown.png"
+		self.CAT_NONE_DOWN_IMAGE = pygame.image.load(self.CAT_NONE_DOWN_FILE)
+		self.CAT_LEFT_DOWN_IMAGE = pygame.image.load(self.CAT_LEFT_DOWN_FILE)
+		self.CAT_RIGHT_DOWN_IMAGE = pygame.image.load(self.CAT_RIGHT_DOWN_FILE)
+		self.CAT_BOTH_DOWN_IMAGE = pygame.image.load(self.CAT_BOTH_DOWN_FILE)
+		
+		self.BONGO_SOUND_LOW_FILE = "sounds/low_bongo.wav"
+		self.BONGO_SOUND_HIGH_FILE = "sounds/high_bongo.wav"
+		self.BONGO_SOUND_LOW = pygame.mixer.Sound(self.BONGO_SOUND_LOW_FILE)
+		self.BONGO_SOUND_HIGH = pygame.mixer.Sound(self.BONGO_SOUND_HIGH_FILE)
 		
 		self.left_down = False
 		self.right_down = False
@@ -17,12 +22,9 @@ class BongoCatGameController():
 		self.screen = None
 		
 def main():
-	
-	
+	pygame.init()	
 	
 	game_control = BongoCatGameController()
-	
-	pygame.init()
 	pygame.display.set_caption("BONGO CAT")
 	game_control.screen = pygame.display.set_mode((800,450))
 	
@@ -36,8 +38,10 @@ def main():
 			if event.type == pygame.MOUSEBUTTONDOWN:
 				if event.button==1:
 					game_control.left_down = True
+					game_control.BONGO_SOUND_LOW.play()
 				if event.button==3:
 					game_control.right_down = True
+					game_control.BONGO_SOUND_HIGH.play()
 			if event.type == pygame.MOUSEBUTTONUP:
 				if event.button==1:
 					game_control.left_down = False
