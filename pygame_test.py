@@ -1,10 +1,14 @@
-#class BackgroundSprite(pygame.sprite.Sprite):
-#	def __init__(self, image_file_path, top_left_corner):
-#        pygame.sprite.Sprite.__init__(self)
-#		self.image = pygame.image.load("BongoCatBothUp.png")
-		
-
 import pygame
+
+class BackgroundSprite(pygame.sprite.Sprite):
+	def __init__(self, image_file_path, top_left_corner):
+		pygame.sprite.Sprite.__init__(self)
+		self.image = pygame.image.load("BongoCatBothUp.png")
+		self.rect = self.image.get_rect()
+		print(self.rect)
+		self.rect.left, self.rect.top = location
+		print(self.rect)
+
 def main():
 	CAT_BOTH_UP_FILE = "BongoCatBothUp.png"
 
@@ -14,6 +18,7 @@ def main():
 	screen.fill(pygame.Color(255,255,255))
 	pygame.display.update()
 
+	
 	running = True
 
 	while(running):
