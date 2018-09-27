@@ -1,26 +1,28 @@
 import pygame
 
-class BackgroundSprite(pygame.sprite.Sprite):
-	def __init__(self, image_file_path, top_left_corner):
-		pygame.sprite.Sprite.__init__(self)
-		self.image = pygame.image.load("BongoCatBothUp.png")
-		self.rect = self.image.get_rect()
-		print(self.rect)
-		self.rect.left, self.rect.top = top_left_corner
-		print(self.rect)
-
+class BongoCatGameController():
+	def __init__(self):
+		self.CAT_NONE_DOWN_FILE = "BongoCatBothUp.png"
+		self.CAT_LEFT_DOWN_FILE = "BongoCatLeftDown.png"
+		self.CAT_RIGHT_DOWN_FILE = "BongoCatRightDown.png"
+		self.CAT_BOTH_DOWN_FILE = "BongoCatBothDown.png"
+		self.CAT_NONE_DOWN_IMAGE = pygame.image.load("BongoCatBothUp.png")
+		self.CAT_LEFT_DOWN_IMAGE = pygame.image.load("BongoCatLeftDown.png")
+		self.CAT_RIGHT_DOWN_IMAGE = pygame.image.load("BongoCatRightDown.png")
+		self.CAT_BOTH_DOWN_IMAGE = pygame.image.load("BongoCatBothDown.png")
+		
+		self.left_down = False
+		self.right_down = False
+		
+		self.screen = None
+		
 def main():
-	CAT_BOTH_UP_FILE = "BongoCatBothUp.png"
-
+	
+	game_control = BongoCatGameController()
+	
 	pygame.init()
 	pygame.display.set_caption("BONGO CAT")
-	screen = pygame.display.set_mode((800,450))
-	screen.fill(pygame.Color(255,255,255))
-
-	background = BackgroundSprite(CAT_BOTH_UP_FILE, (0,0))
-	screen.blit(background.image, background.rect)
-
-	pygame.display.update()
+	game_control.screen = pygame.display.set_mode((800,450))
 	
 	running = True
 	while(running):
@@ -31,13 +33,33 @@ def main():
 				
 			if event.type == pygame.MOUSEBUTTONDOWN:
 				if event.button==1:
-					screen.fill(pygame.Color(0,255,0))
-					pygame.display.update()
+					game_control.left_down = True
+				if event.button==3:
+					game_control.right_down = True
 			if event.type == pygame.MOUSEBUTTONUP:
-				screen.fill(pygame.Color(255,255,255))
-				pygame.display.update()
+				if event.button==1:
+					game_control.left_down = False
+				if event.button==3:
+					game_control.right_down = False
 
+		_update_screen(game_control)
 	pygame.quit()
 
+def _update_screen(game_control):
+	game_control.screen.fill(pygame.Color(255,255,255))
+	background_image = _choose_cat(game_control)
+	game_control.screen.blit(background_image, (0,0))
+	pygame.display.update()
+	
+def _choose_cat(game_control):
+	if game_control.left_down and game_control.right_down:
+		return game_control.CAT_BOTH_DOWN_IMAGE
+	elif game_control.left_down:
+		return game_control.CAT_LEFT_DOWN_IMAGE
+	elif game_control.right_down:
+		return game_control.CAT_RIGHT_DOWN_IMAGE
+	else:
+		return game_control.CAT_NONE_DOWN_IMAGE
+	
 if __name__=="__main__":
 	main()
