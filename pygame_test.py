@@ -6,7 +6,7 @@ class BackgroundSprite(pygame.sprite.Sprite):
 		self.image = pygame.image.load("BongoCatBothUp.png")
 		self.rect = self.image.get_rect()
 		print(self.rect)
-		self.rect.left, self.rect.top = location
+		self.rect.left, self.rect.top = top_left_corner
 		print(self.rect)
 
 def main():
@@ -16,11 +16,13 @@ def main():
 	pygame.display.set_caption("BONGO CAT")
 	screen = pygame.display.set_mode((800,450))
 	screen.fill(pygame.Color(255,255,255))
-	pygame.display.update()
 
+	background = BackgroundSprite(CAT_BOTH_UP_FILE, (0,0))
+	screen.blit(background.image, background.rect)
+
+	pygame.display.update()
 	
 	running = True
-
 	while(running):
 		for event in pygame.event.get():
 			print(event)
