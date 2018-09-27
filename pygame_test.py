@@ -6,10 +6,10 @@ class BongoCatGameController():
 		self.CAT_LEFT_DOWN_FILE = "BongoCatLeftDown.png"
 		self.CAT_RIGHT_DOWN_FILE = "BongoCatRightDown.png"
 		self.CAT_BOTH_DOWN_FILE = "BongoCatBothDown.png"
-		self.CAT_NONE_DOWN_IMAGE = pygame.image.load("BongoCatBothUp.png")
-		self.CAT_LEFT_DOWN_IMAGE = pygame.image.load("BongoCatLeftDown.png")
-		self.CAT_RIGHT_DOWN_IMAGE = pygame.image.load("BongoCatRightDown.png")
-		self.CAT_BOTH_DOWN_IMAGE = pygame.image.load("BongoCatBothDown.png")
+		self.CAT_NONE_DOWN_IMAGE = pygame.image.load("images/BongoCatBothUp.png")
+		self.CAT_LEFT_DOWN_IMAGE = pygame.image.load("images/BongoCatLeftDown.png")
+		self.CAT_RIGHT_DOWN_IMAGE = pygame.image.load("images/BongoCatRightDown.png")
+		self.CAT_BOTH_DOWN_IMAGE = pygame.image.load("images/BongoCatBothDown.png")
 		
 		self.left_down = False
 		self.right_down = False
@@ -17,6 +17,8 @@ class BongoCatGameController():
 		self.screen = None
 		
 def main():
+	
+	
 	
 	game_control = BongoCatGameController()
 	
@@ -27,7 +29,7 @@ def main():
 	running = True
 	while(running):
 		for event in pygame.event.get():
-			print(event)
+			#print(event)
 			if event.type == pygame.QUIT:
 				running = False
 				
@@ -47,11 +49,11 @@ def main():
 
 def _update_screen(game_control):
 	game_control.screen.fill(pygame.Color(255,255,255))
-	background_image = _choose_cat(game_control)
+	background_image = _choose_cat_image(game_control)
 	game_control.screen.blit(background_image, (0,0))
 	pygame.display.update()
 	
-def _choose_cat(game_control):
+def _choose_cat_image(game_control):
 	if game_control.left_down and game_control.right_down:
 		return game_control.CAT_BOTH_DOWN_IMAGE
 	elif game_control.left_down:
