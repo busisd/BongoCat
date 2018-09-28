@@ -19,8 +19,10 @@ class BongoCatGameController():
 
 		self.BULB_FILE = "./images/bulb.png"
 		self.DISCO_FILE = "./images/disco.png"
+		self.RAINBOW_FILE = "./images/rainbow.png"
 		self.BULB_IMAGE = pygame.image.load(self.BULB_FILE)
 		self.DISCO_IMAGE = pygame.image.load(self.DISCO_FILE)
+		self.RAINBOW_IMAGE = pygame.image.load(self.RAINBOW_FILE)
 		
 		self.CAT_NONE_DOWN_IMAGE.set_colorkey((255,255,255))
 		self.CAT_LEFT_DOWN_IMAGE.set_colorkey((255,255,255))
@@ -51,7 +53,7 @@ class BongoCatGameController():
 		self.game_clock = None
 		
 		self.rainbow = RainbowControl()
-		self.rainbow_mode = True
+		self.rainbow_mode = False
 		
 class RainbowControl():
 	def __init__(self):
@@ -111,8 +113,10 @@ def main():
 			if event.type == pygame.KEYDOWN:
 				if event.key==32:
 					game_control.lightswitch_mode = not game_control.lightswitch_mode
-				if event.key==114:
+				if event.key==100:
 					game_control.disco_mode = not game_control.disco_mode
+				if event.key==114:
+					game_control.rainbow_mode = not game_control.rainbow_mode
 				if event.key==119:
 					_return_to_white(game_control)
 				if event.key==276:
@@ -194,10 +198,13 @@ def _update_screen(game_control):
 	game_control.screen.fill(game_control.bg_color)
 	background_image = _choose_cat_image(game_control)
 	game_control.screen.blit(background_image, (0,0))
-	if game_control.lightswitch_mode:
-		game_control.screen.blit(game_control.BULB_IMAGE, (20,450-64-20))
-	if game_control.disco_mode:
-		game_control.screen.blit(game_control.DISCO_IMAGE, (20+64,450-64-20))
+	if game_control.rainbow_mode:
+		game_control.screen.blit(game_control.RAINBOW_IMAGE, (20,450-64-20))		
+	else:
+		if game_control.lightswitch_mode:
+			game_control.screen.blit(game_control.BULB_IMAGE, (20,450-64-20))
+		if game_control.disco_mode:
+			game_control.screen.blit(game_control.DISCO_IMAGE, (20+64,450-64-20))
 	pygame.display.update()
 	
 def _choose_cat_image(game_control):
