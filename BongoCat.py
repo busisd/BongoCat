@@ -1,3 +1,8 @@
+#Coded by Daniel Busis
+#Inspired by (and art taken from) https://bongo.cat
+#Bongo sounds from https://www.freesound.org
+#Music: https://www.bensound.com
+
 import pygame
 import random
 
@@ -26,6 +31,14 @@ class BongoCatGameController():
 		self.BONGO_SOUND_HIGH_FILE = "sounds/high_bongo.wav"
 		self.BONGO_SOUND_LOW = pygame.mixer.Sound(self.BONGO_SOUND_LOW_FILE)
 		self.BONGO_SOUND_HIGH = pygame.mixer.Sound(self.BONGO_SOUND_HIGH_FILE)
+		
+		self.MUSIC_POP_FILE = "music/bensound-creativeminds.mp3"
+		self.MUSIC_JAZZ_FILE = "music/bensound-jazzyfrenchy.mp3"
+		self.MUSIC_TECH_FILE = "music/bensound-summer.mp3"
+		self.MUSIC_JINGLE_FILE = "music/bensound-ukulele.mp3"
+		self.cur_song = -1
+		self.song_list = [self.MUSIC_POP_FILE, self.MUSIC_JAZZ_FILE, self.MUSIC_TECH_FILE, self.MUSIC_JINGLE_FILE]
+		self.SONG_VOLUME = .45
 		
 		self.left_down = False
 		self.right_down = False
@@ -75,6 +88,10 @@ def main():
 					_left_bongo_down(game_control)
 				if event.key==275:
 					_right_bongo_down(game_control)
+				if event.key==273:
+					_toggle_song(game_control, 1)
+				if event.key==274:
+					_toggle_song(game_control, -1)
 			if event.type == pygame.KEYUP:
 				if event.key==276:
 					_left_bongo_up(game_control)
@@ -158,6 +175,18 @@ def _choose_cat_image(game_control):
 		return game_control.CAT_RIGHT_DOWN_IMAGE
 	else:
 		return game_control.CAT_NONE_DOWN_IMAGE
-	
+
+def _toggle_song(game_control, toggle_direction):
+	pygame.mixer.music.stop()
+	game_control.cur_song += toggle_direction
+	if game_control.cur_song >= len(game_control.song_list):
+		game_control.cur_song -= len(game_control.song_list) + 1
+	if game_control.cur_song < -1:
+		game_control.cur_song += len(game_control.song_list)
+	if not game_control.cur_song == -1:
+		pygame.mixer.music.load(game_control.song_list[game_control.cur_song])
+		pygame.mixer.music.set_volume(game_control.SONG_VOLUME)
+		pygame.mixer.music.play()
+		
 if __name__=="__main__":
 	main()
