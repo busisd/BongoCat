@@ -24,11 +24,6 @@ class BongoCatGameController():
 		self.DISCO_IMAGE = pygame.image.load(self.DISCO_FILE)
 		self.RAINBOW_IMAGE = pygame.image.load(self.RAINBOW_FILE)
 		
-		self.CAT_NONE_DOWN_IMAGE.set_colorkey((255,255,255))
-		self.CAT_LEFT_DOWN_IMAGE.set_colorkey((255,255,255))
-		self.CAT_RIGHT_DOWN_IMAGE.set_colorkey((255,255,255))
-		self.CAT_BOTH_DOWN_IMAGE.set_colorkey((255,255,255))
-
 		self.BONGO_SOUND_LOW_FILE = "sounds/low_bongo.wav"
 		self.BONGO_SOUND_HIGH_FILE = "sounds/high_bongo.wav"
 		self.BONGO_SOUND_LOW = pygame.mixer.Sound(self.BONGO_SOUND_LOW_FILE)
@@ -54,6 +49,15 @@ class BongoCatGameController():
 		
 		self.rainbow = RainbowControl()
 		self.rainbow_mode = False
+		
+		self.font = pygame.font.SysFont(None, 36)
+		self.font_color = pygame.Color(188,188,188)
+		self.text_render = None
+		self.song_name_list = ["None", "Pop", "Jazzy", "Techno", "Jingle"]
+		self._update_text_render()
+		
+	def _update_text_render(self):
+		self.text_render = self.font.render("Current track: "+self.song_name_list[self.cur_song+1], True, self.font_color)
 		
 class RainbowControl():
 	def __init__(self):
@@ -86,6 +90,7 @@ class RainbowControl():
 def main():
 	pygame.mixer.pre_init(44100, -16, 2, 2048)
 	pygame.mixer.init()
+	pygame.font.init()
 	pygame.init()	
 	
 	game_control = BongoCatGameController()
@@ -205,7 +210,11 @@ def _update_screen(game_control):
 			game_control.screen.blit(game_control.BULB_IMAGE, (20,450-64-20))
 		if game_control.disco_mode:
 			game_control.screen.blit(game_control.DISCO_IMAGE, (20+64,450-64-20))
+	_display_soundtrack(game_control)
 	pygame.display.update()
+	
+def _display_soundtrack(game_control):
+	game_control.screen.blit(game_control.text_render, (800 - 300, 450 - 24 - 20))
 	
 def _choose_cat_image(game_control):
 	if game_control.left_down and game_control.right_down:
@@ -228,6 +237,7 @@ def _toggle_song(game_control, toggle_direction):
 		pygame.mixer.music.load(game_control.song_list[game_control.cur_song])
 		pygame.mixer.music.set_volume(game_control.SONG_VOLUME)
 		pygame.mixer.music.play()
+	game_control._update_text_render()
 		
 if __name__=="__main__":
 	main()
