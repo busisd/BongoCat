@@ -69,6 +69,8 @@ def main():
 					game_control.lightswitch_mode = not game_control.lightswitch_mode
 				if event.key==114:
 					game_control.rainbow_mode = not game_control.rainbow_mode
+				if event.key==119:
+					_return_to_white(game_control)
 				if event.key==276:
 					_left_bongo_down(game_control)
 				if event.key==275:
@@ -134,6 +136,8 @@ def _randomize_colors(game_control):
 	game_control.bg_color.g = new_colors[1]
 	game_control.bg_color.b = new_colors[2]
 
+def _return_to_white(game_control):
+	game_control.bg_color= pygame.Color(255,255,255)
 	
 def _update_screen(game_control):
 	game_control.screen.fill(game_control.bg_color)
