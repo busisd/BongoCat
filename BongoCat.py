@@ -1,7 +1,7 @@
 #Coded by Daniel Busis
 #Inspired by (and art taken from) https://bongo.cat
 #Bongo sounds from https://www.freesound.org
-#Music: https://www.bensound.com
+#Music from: https://www.bensound.com
 
 import pygame
 import random
@@ -45,10 +45,41 @@ class BongoCatGameController():
 		
 		self.bg_color = pygame.Color(255,255,255)
 		self.lightswitch_mode = False
-		self.rainbow_mode = False
+		self.disco_mode = False
 		
 		self.screen = None
 		self.game_clock = None
+		
+		self.rainbow = RainbowControl()
+		self.rainbow_mode = True
+		
+class RainbowControl():
+	def __init__(self):
+		self.color_percents = [1.0,1.0,1.0]
+		self.frames_per_shift = 60
+		self.cur_frames = 0
+		self.color_goals = None
+		self.color_steps = None
+		self._choose_new_color_goals()
+		
+	def get_color(self):
+		return pygame.Color(int(self.color_percents[0]*255),int(self.color_percents[1]*255),int(self.color_percents[2]*255))
+		print(self.color_percents)
+		
+	def shift_rainbow(self):
+		self.cur_frames+=1
+		for i in range(0,3):
+			self.color_percents[i] += self.color_steps[i]
+			if self.color_percents[i] < 0:
+				self.color_percents[i] = 0
+		
+		if self.cur_frames >= self.frames_per_shift:
+			self.cur_frames=0
+			self._choose_new_color_goals()
+		
+	def _choose_new_color_goals(self):
+		self.color_goals = [random.random(), random.random(), random.random()]
+		self.color_steps = [(1.0/self.frames_per_shift)*(self.color_goals[i] - self.color_percents[i]) for i in range(0,3)]
 		
 def main():
 	pygame.mixer.pre_init(44100, -16, 2, 2048)
@@ -81,7 +112,7 @@ def main():
 				if event.key==32:
 					game_control.lightswitch_mode = not game_control.lightswitch_mode
 				if event.key==114:
-					game_control.rainbow_mode = not game_control.rainbow_mode
+					game_control.disco_mode = not game_control.disco_mode
 				if event.key==119:
 					_return_to_white(game_control)
 				if event.key==276:
@@ -97,9 +128,12 @@ def main():
 					_left_bongo_up(game_control)
 				if event.key==275:
 					_right_bongo_up(game_control)
-		if game_control.rainbow_mode:
+		if game_control.disco_mode:
 			_randomize_colors(game_control)
-
+		if game_control.rainbow_mode:
+			game_control.rainbow.shift_rainbow()
+			game_control.bg_color = game_control.rainbow.get_color()
+			
 		_update_screen(game_control)
 		game_control.game_clock.tick(60)
 	pygame.quit()
@@ -162,7 +196,7 @@ def _update_screen(game_control):
 	game_control.screen.blit(background_image, (0,0))
 	if game_control.lightswitch_mode:
 		game_control.screen.blit(game_control.BULB_IMAGE, (20,450-64-20))
-	if game_control.rainbow_mode:
+	if game_control.disco_mode:
 		game_control.screen.blit(game_control.DISCO_IMAGE, (20+64,450-64-20))
 	pygame.display.update()
 	
