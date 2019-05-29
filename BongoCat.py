@@ -232,7 +232,7 @@ def _toggle_song(game_control, toggle_direction):
 	if game_control.cur_song >= len(game_control.song_list):
 		game_control.cur_song -= len(game_control.song_list) + 1
 	if game_control.cur_song < -1:
-		game_control.cur_song += len(game_control.song_list)
+		game_control.cur_song = len(game_control.song_list) - 1
 	if not game_control.cur_song == -1:
 		pygame.mixer.music.load(game_control.song_list[game_control.cur_song])
 		pygame.mixer.music.set_volume(game_control.SONG_VOLUME)
